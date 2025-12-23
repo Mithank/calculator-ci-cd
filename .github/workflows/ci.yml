@@ -1,4 +1,4 @@
-name: CI-CD
+name: CI-CD-VERIFY
 
 on:
   push:
@@ -43,3 +43,7 @@ jobs:
       - name: Push Docker image
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/calculator-ci-cd:latest
+
+      - name: Verify container runs
+        run: |
+          docker run --rm ${{ secrets.DOCKER_USERNAME }}/calculator-ci-cd:latest
