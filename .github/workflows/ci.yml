@@ -1,11 +1,11 @@
-name: CI
+name: CI-CD
 
 on:
   push:
     branches: [ main ]
 
 jobs:
-  test:
+  ci:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,3 +22,14 @@ jobs:
 
       - name: Run tests
         run: npm test
+
+  cd:
+    needs: ci
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t calculator-ci-cd:latest .
