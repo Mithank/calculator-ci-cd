@@ -61,3 +61,14 @@ jobs:
       - name: Verify container runs
         run: |
           docker run --rm ${{ secrets.DOCKER_USERNAME }}/calculator-ci-cd:${{ steps.version.outputs.VERSION }}
+  security:
+    needs: cd
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Scan Docker image for vulnerabilities
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ secrets.DOCKER_USERNAME }}/calculator-ci-cd:latest
+          severity: CRITICAL,HIGH
+          exit-code: 1
